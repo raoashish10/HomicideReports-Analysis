@@ -53,21 +53,22 @@ This step doesn't directly add the co-ordinates in the Homicide Reports dataset 
 file. This step can be avoided if needed. 
 
 """
-    
-murderdata1=pd.read_csv(r'A:\Ashish\TestingProjects\Datasets\Homicide Reports (1980-2014)\database.csv',\
-                        index_col=0,na_values=['?'],usecols=['City','State'])
+
+weapons_df=pd.read_csv(r'A:\Ashish\TestingProjects\Datasets\Homicide Reports (1980-2014)\database.csv',\
+                        na_values=['?'],usecols=['Weapon','City','State'])
 citiesdata=pd.read_csv(r'A:\Ashish\TestingProjects\Datasets\Homicide Reports (1980-2014)\simplemaps_uscities_basicv1.6\uscities.csv',\
                         usecols=['lat','lng','state_name','county_name','city'] )
+# Remove the usecols attribute if you want to view the whole dataset.
 
-#murderdata2=murderdata1.iloc[:10000]
-murdercities=sorted(list(murderdata1['City'].value_counts().keys()))
+#murderdata2=weapons_df.iloc[:10000]
+murdercities=sorted(list(weapons_df['City'].value_counts().keys()))
 
 murderstates=[]
 
 for i in murdercities:
-    indexi=murderdata1[murderdata1['City']==i].index
+    indexi=weapons_df[weapons_df['City']==i].index
     if indexi.size!=0:
-        murderstates.append(murderdata1['State'][indexi[0]])
+        murderstates.append(weapons_df['State'][indexi[0]])
     else:
         murderstates.append('?')
 
@@ -88,9 +89,8 @@ for i in range(len(murdercities)):
     
     
 murderdata3=pd.DataFrame(data=zip(murdercities,murderstates,lat,long),columns=['Cities','States','Lat','Long'])      
-murderdata3.set_index('Cities',inplace=True)
 
-#top10=list(murderdata1['City'].value_counts().keys())[:10]
+#top10=list(weapons_df['City'].value_counts().keys())[:10]
 
 dadeindex=murderdata3[murderdata3['Cities']=='Dade'].index[0]
 murderdata3['Lat'][dadeindex]=28.3647
@@ -117,9 +117,7 @@ Path: A:\\Ashish\\TestingProjects\\Datasets\\Homicide Reports (1980-2014)\\clean
 to the Homicide Reports dataset.
 
 """
-weapons_df=pd.read_csv(r'A:\Ashish\TestingProjects\Datasets\Homicide Reports (1980-2014)\database.csv',\
-                        usecols=['Weapon','City','State'])
-#murderdata1['Weapon'].value_counts()    
+#weapons_df['Weapon'].value_counts()    
 weapons_df['Lat']='?'
 weapons_df['Long']='?'
 
