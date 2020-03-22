@@ -51,67 +51,61 @@ The main objective in this step is to link the co-ordinates to the cities in the
 from the US Cities Co-ordinates Dataset.
 This step doesn't directly add the co-ordinates in the Homicide Reports dataset instead it creates another csv
 file. This step can be avoided if needed. 
-*** OPTIONAL ***
 
-(EXECUTE ONLY ONCE TO MAKE THE CSV FILE 
-AFTER THAT COMMENT EVERYTHING IN STEP 1): 
-(This step will save time for future execution)
-
-****************  
 """
     
-#murderdata1=pd.read_csv(r'A:\Ashish\TestingProjects\Datasets\Homicide Reports (1980-2014)\database.csv',\
-#                  index_col=0,na_values=['?'],usecols=['City','State'])
-#citiesdata=pd.read_csv(r'A:\Ashish\TestingProjects\Datasets\Homicide Reports (1980-2014)\simplemaps_uscities_basicv1.6\uscities.csv'\
-#                        usecols=['lat','lng','state_name','county_name','city'] )
+murderdata1=pd.read_csv(r'A:\Ashish\TestingProjects\Datasets\Homicide Reports (1980-2014)\database.csv',\
+                        index_col=0,na_values=['?'],usecols=['City','State'])
+citiesdata=pd.read_csv(r'A:\Ashish\TestingProjects\Datasets\Homicide Reports (1980-2014)\simplemaps_uscities_basicv1.6\uscities.csv',\
+                        usecols=['lat','lng','state_name','county_name','city'] )
 
 #murderdata2=murderdata1.iloc[:10000]
-#murdercities=sorted(list(murderdata1['City'].value_counts().keys()))
+murdercities=sorted(list(murderdata1['City'].value_counts().keys()))
 
-#murderstates=[]
+murderstates=[]
 
-#for i in murdercities:
-#    indexi=murderdata1[murderdata1['City']==i].index
-#    if indexi.size!=0:
-#        murderstates.append(murderdata1['State'][indexi[0]])
-#    else:
-#        murderstates.append('?')
+for i in murdercities:
+    indexi=murderdata1[murderdata1['City']==i].index
+    if indexi.size!=0:
+        murderstates.append(murderdata1['State'][indexi[0]])
+    else:
+        murderstates.append('?')
 
-#lat=[]
-#long=[]
+lat=[]
+long=[]
 
-#for i in range(len(murdercities)):
-#    c=murdercities[i]
-#    s=murderstates[i]
-#    k=0
-#    indexi2=citiesdata[((citiesdata['city']==c) & (citiesdata['state_name']==s)) | ((citiesdata['county_name']==c) & (citiesdata['state_name']==s)) ].index
-#    if indexi2.size!=0:
-#        lat.append(citiesdata['lat'][indexi2[0]])
-#        long.append(citiesdata['lng'][indexi2[0]])
-#    else:
-#        lat.append('?')
-#        long.append('?')
-#    
+for i in range(len(murdercities)):
+    c=murdercities[i]
+    s=murderstates[i]
+    k=0
+    indexi2=citiesdata[((citiesdata['city']==c) & (citiesdata['state_name']==s)) | ((citiesdata['county_name']==c) & (citiesdata['state_name']==s)) ].index
+    if indexi2.size!=0:
+        lat.append(citiesdata['lat'][indexi2[0]])
+        long.append(citiesdata['lng'][indexi2[0]])
+    else:
+        lat.append('?')
+        long.append('?')
     
-#murderdata3=pd.DataFrame(data=zip(murdercities,murderstates,lat,long),columns=['Cities','States','Lat','Long'])      
-#murderdata3.set_index('Cities',inplace=True)
+    
+murderdata3=pd.DataFrame(data=zip(murdercities,murderstates,lat,long),columns=['Cities','States','Lat','Long'])      
+murderdata3.set_index('Cities',inplace=True)
 
 #top10=list(murderdata1['City'].value_counts().keys())[:10]
 
-#dadeindex=murderdata3[murderdata3['Cities']=='Dade'].index[0]
-#murderdata3['Lat'][dadeindex]=28.3647
-#murderdata3['Long'][dadeindex]=-82.1959
+dadeindex=murderdata3[murderdata3['Cities']=='Dade'].index[0]
+murderdata3['Lat'][dadeindex]=28.3647
+murderdata3['Long'][dadeindex]=-82.1959
 
-#bcindex=murderdata3[murderdata3['Cities']=='Baltimore city'].index
-#bindex=murderdata3[murderdata3['Cities']=='Baltimore'].index
-#murderdata3['Lat'][bcindex]=murderdata3['Lat'][bindex]
-#murderdata3['Long'][bcindex]=murderdata3['Long'][bindex]
+bcindex=murderdata3[murderdata3['Cities']=='Baltimore city'].index
+bindex=murderdata3[murderdata3['Cities']=='Baltimore'].index
+murderdata3['Lat'][bcindex]=murderdata3['Lat'][bindex]
+murderdata3['Long'][bcindex]=murderdata3['Long'][bindex]
 
-#murderdata3['Lat'].value_counts()
-#murderdata3=murderdata3[murderdata3['Lat']!='?']
-#murderdata3=murderdata3[murderdata3['Long']!='?']
+murderdata3['Lat'].value_counts()
+murderdata3=murderdata3[murderdata3['Lat']!='?']
+murderdata3=murderdata3[murderdata3['Long']!='?']
 
-#murderdata3.to_csv(r'A:\Ashish\TestingProjects\Datasets\Homicide Reports (1980-2014)\cleandatabase.csv',index=False)
+murderdata3.to_csv(r'A:\Ashish\TestingProjects\Datasets\Homicide Reports (1980-2014)\cleandatabase.csv',index=False)
 
 """ END STEP 1 """
 
